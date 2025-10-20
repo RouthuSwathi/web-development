@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Advanced Styling and JavaScript</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      margin: 0;
+      background-color: #f2f2f2;
+    }
+
+    header {
+      text-align: center;
+      background-color: #004d40;
+      color: white;
+      padding: 20px 0;
+    }
+
+    section {
+      margin: 30px auto;
+      max-width: 800px;
+      padding: 20px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      color: #00695c;
+    }
+
+    .quiz button,
+    .carousel button,
+    .joke button {
+      padding: 10px 20px;
+      margin: 10px 5px;
+      font-size: 16px;
+      border: none;
+      background-color: #00796b;
+      color: white;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+
+    .quiz button:hover,
+    .carousel button:hover,
+    .joke button:hover {
+      background-color: #004d40;
+    }
+
+    #carouselImage {
+      display: block;
+      margin: 15px auto;
+      width: 100%;
+      max-width: 500px;
+      border-radius: 8px;
+    }
+
+    /* Fade-in animation */
+    .fade-in {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @media (max-width: 768px) {
+      body {
+        background-color: #e0f2f1;
+      }
+
+      section {
+        margin: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h2 {
+        font-size: 20px;
+      }
+
+      button {
+        font-size: 14px;
+      }
+
+      #carouselImage {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Advanced Styling and JavaScript</h1>
+    <p>Responsive Design | Quiz | Image Carousel | API Data</p>
+  </header>
+
+  <!-- Section 1: Responsive Design -->
+  <section>
+    <h2>Responsive Design in Action</h2>
+    <p>Resize your browser or view this page on different devices to see changes in layout and background.</p>
+  </section>
+
+  <!-- Section 2: Quiz -->
+  <section class="quiz">
+    <h2>Simple JavaScript Quiz</h2>
+    <p id="question">What is the capital of India?</p>
+    <button onclick="checkAnswer('Mumbai')">Mumbai</button>
+    <button onclick="checkAnswer('Delhi')">Delhi</button>
+    <button onclick="checkAnswer('Kolkata')">Kolkata</button>
+    <p id="quizResult"></p>
+  </section>
+
+<!-- Section 3: Image Carousel -->
+<section class="carousel">
+  <h2>Explore Delhi</h2>
+  <img id="carouselImage" src="https://images.unsplash.com/photo-1594729095022-e2f6d2c5c4f1?auto=format&fit=crop&w=800&q=60" alt="Delhi Image" />
+  <p id="caption">India Gate, Delhi</p>
+  <button onclick="nextImage()">Next Image</button>
+</section>
+  <!-- Section 4: Fetch API -->
+  <section class="joke">
+    <h2>Random Joke Generator</h2>
+    <button onclick="fetchJoke()">Get a Joke</button>
+    <p id="jokeText">Click the button to get a random joke from the API.</p>
+  </section>
+
+  <script>
+    // Quiz Logic
+    function checkAnswer(answer) {
+      const correct = "Delhi";
+      const result = document.getElementById("quizResult");
+      if (answer === correct) {
+        result.textContent = "✅ Correct!";
+      } else {
+        result.textContent = "❌ Try Again!";
+      }
+    }
+
+    // Delhi Image Carousel
+  const images = [
+    {
+      url: "https://www.google.com/imgres?q=India%20Gate%2C%20Delhi&imgurl=https%3A%2F%2Ftraveleva.gumlet.io%2Factivities%2F1968%2F1968_India-Gate.jpg%3Fw%3D1244%26h%3D312&imgrefurl=https%3A%2F%2Ftraveleva.in%2Fdelhi-d39%2Findia-gate-a1968%3Fsrsltid%3DAfmBOorQBoOoYLM9vXqlCvNQAzWtTSxRBHJ6lybrXzLLyM09xzYD-T56&docid=PD9t0UyRSqtW1M&tbnid=i64LihJ64P9zoM&vet=12ahUKEwjl7e7uifmOAxVXxjgGHa7wCbQQM3oECBsQAA..i&w=468&h=312&hcb=2&ved=2ahUKEwjl7e7uifmOAxVXxjgGHa7wCbQQM3oECBsQAA",
+      caption: "India Gate, Delhi"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1606813905944-e169341f7e8c?auto=format&fit=crop&w=800&q=60",
+      caption: "Red Fort, Delhi"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1578821090302-7e0cf4c09834?auto=format&fit=crop&w=800&q=60",
+      caption: "Lotus Temple, Delhi"
+    }
+  ];
+    let currentIndex = 0;
+
+  function nextImage() {
+    const img = document.getElementById("carouselImage");
+    const caption = document.getElementById("caption");
+
+    currentIndex = (currentIndex + 1) % images.length;
+
+    img.classList.remove("fade-in");
+    void img.offsetWidth; // trigger reflow
+    img.src = images[currentIndex].url;
+    caption.textContent = images[currentIndex].caption;
+    img.classList.add("fade-in");
+  }
+
+    // Fetch API Joke Logic
+    async function fetchJoke() {
+      try {
+        const response = await fetch("https://official-joke-api.appspot.com/random_joke");
+        const data = await response.json();
+        document.getElementById("jokeText").textContent = `${data.setup} - ${data.punchline}`;
+      } catch (error) {
+        document.getElementById("jokeText").textContent = "⚠️ Failed to fetch joke. Try again.";
+      }
+    }
+  </script>
+
+</body>
+</html>
